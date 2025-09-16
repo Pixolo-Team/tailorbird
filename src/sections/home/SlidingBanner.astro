@@ -1,3 +1,141 @@
-<section>
-  <img src="/images/after-hero-section.png" alt="Slidign Banner" />
+---
+
+---
+
+<section class="my-20 md:my-40" id="banner">
+  <div class="relative h-[350px]">
+    <!-- Dark stripe -->
+    <div
+      class="bg-n-950 absolute top-1/2 left-[50%] w-[110vw] origin-center -translate-[50%] rotate-10 overflow-hidden p-4 md:rotate-8 md:p-8"
+      style="box-shadow: 0 10px 7.6px 0 rgba(0, 0, 0, 0.16)"
+    >
+      <div class="scroll-left banner-content">
+        <span class="banner-text outline-text">BREAK THE PATTERN</span>
+        <span class="banner-text text-n-50">DARE DESIGN DELIVER</span>
+        <span class="banner-text outline-text">YOUR VISION OUR CRAFT</span>
+        <span class="banner-text text-n-50">FUTURE IN FORM</span>
+        <span class="banner-text outline-text">BREAK THE PATTERN</span>
+        <span class="banner-text text-n-50">DARE DESIGN DELIVER</span>
+      </div>
+    </div>
+
+    <!-- Light Stripe  -->
+    <div
+      class="border-n-950 bg-n-50 -md:rotate-8 absolute top-1/2 left-[50%] w-[110vw] origin-center -translate-[50%] -rotate-10 overflow-hidden border-2 p-8"
+      style="box-shadow: 0 10px 7.6px 0 rgba(0, 0, 0, 0.16)"
+    >
+      <div class="scroll-right banner-content">
+        <span class="banner-text outline-text-n-950 text-n-50"
+          >BREAK THE PATTERN</span
+        >
+        <span class="banner-text text-n-950">DARE DESIGN DELIVER</span>
+        <span class="banner-text outline-text-n-950 text-n-50"
+          >YOUR VISION OUR CRAFT</span
+        >
+        <span class="banner-text text-n-950">FUTURE IN FORM</span>
+        <span class="banner-text outline-text-n-950 text-n-50"
+          >YOUR VISION OUR CRAFT</span
+        >
+        <span class="banner-text text-n-950">FUTURE IN FORM</span>
+      </div>
+    </div>
+  </div>
 </section>
+
+<style>
+  .outline-text {
+    -webkit-text-stroke-width: 2px;
+    -webkit-text-stroke-color: var(--color-n-50);
+  }
+
+  .outline-text-n-950 {
+    -webkit-text-stroke-width: 2px;
+    -webkit-text-stroke-color: var(--color-n-950);
+  }
+
+  .scroll-left,
+  .scroll-right {
+    will-change: transform;
+  }
+  @media (min-width: 768px) {
+    .banner-stripe {
+      padding: 2rem;
+    }
+  }
+
+  .banner-content {
+    display: flex;
+    align-items: center;
+    gap: 4rem;
+    white-space: nowrap;
+  }
+
+  .banner-text {
+    font-size: 3rem;
+    font-weight: bold;
+  }
+
+  @media (min-width: 768px) {
+    .banner-text {
+      font-size: 4.5rem;
+    }
+  }
+</style>
+
+<!-- Make sure it's inside the HTML output -->
+<script is:inline type="module">
+  import {
+    scroll,
+    transform,
+  } from "https://cdn.jsdelivr.net/npm/motion@latest/+esm";
+
+  const left = document.querySelector(".scroll-left");
+  const right = document.querySelector(".scroll-right");
+  const banner = document.getElementById("banner");
+
+  // Calculate the width of the content to determine scroll distance
+  const leftWidth = left.scrollWidth;
+  const rightWidth = right.scrollWidth;
+  const viewportWidth = window.innerWidth;
+
+  // Calculate the distance needed to scroll from first text visible to last text visible
+  const leftScrollDistance = leftWidth - viewportWidth;
+  const rightScrollDistance = rightWidth - viewportWidth;
+
+  // Use Motion One scroll driver to map page progress to x-translation
+  scroll((progress) => {
+    // Left banner: starts with first text visible (0px), ends with last text visible
+    const leftX = transform(progress, [0, 1], [0, -leftScrollDistance]);
+
+    // Right banner: starts with last text visible, ends with first text visible
+    const rightX = transform(progress, [0, 1], [-rightScrollDistance, 0]);
+
+    if (left) left.style.transform = `translateX(${leftX}px)`;
+    if (right) right.style.transform = `translateX(${rightX}px)`;
+  });
+
+  // Recalculate on resize
+  window.addEventListener("resize", () => {
+    const newViewportWidth = window.innerWidth;
+    const newLeftScrollDistance = leftWidth - newViewportWidth;
+    const newRightScrollDistance = rightWidth - newViewportWidth;
+
+    scroll(
+      (progress) => {
+        const leftX = transform(progress, [0, 1], [0, -newLeftScrollDistance]);
+        const rightX = transform(
+          progress,
+          [0, 1],
+          [-newRightScrollDistance, 0]
+        );
+
+        if (left) left.style.transform = `translateX(${leftX}px)`;
+        if (right) right.style.transform = `translateX(${rightX}px)`;
+      },
+      {
+        target: banner,
+        offset: ["start end", "end start"],
+      }
+    );
+  });
+</script>
