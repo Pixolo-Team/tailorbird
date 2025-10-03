@@ -1,5 +1,14 @@
 ---
+// TYPES //
+import type { TeamMember } from "../../types/team";
+
+// CONSTANTS //
+import { API_URL } from "../../constants";
+
+// OTHERS //
 import Layout from "../../layouts/Layout.astro";
+
+// SECTIONS //
 import Hero from "../../sections/about/Hero.astro";
 import OurEdge from "../../sections/about/OurEdge.astro";
 import Team from "../../sections/about/Team.astro";
@@ -7,13 +16,22 @@ import Founder from "../../sections/about/Founder.astro";
 import Culture from "../../sections/about/Culture.astro";
 import WhyUs from "../../sections/about/WhyUs.astro";
 import Brands from "../../sections/about/Brands.astro";
+
+let teamInfo: TeamMember[] = [];
+try {
+  const res = await fetch(API_URL);
+  const json = await res.json();
+  teamInfo = json?.data?.about_page.team_members ?? [];
+} catch (e) {
+  console.error(e);
+}
 ---
 
 <Layout>
   <Hero />
   <WhyUs />
   <Brands />
-  <Team />
+  <Team teamMembers={teamInfo} />
   <Founder />
   <Culture />
   <OurEdge />
