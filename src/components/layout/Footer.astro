@@ -9,7 +9,49 @@ import { footerMenuItems } from "../../constants";
   >
     <!-- Logo Wrapper -->
     <div class="flex flex-col items-center gap-4 md:gap-6 md:pb-2.5 lg:gap-0">
-      <img src="/images/stylsmyth-brand-logo-white.svg" alt="styl-smyth" />
+      <a
+        href="/contact"
+        class="group relative inline-block cursor-pointer"
+        data-hover-text="Contact Us"
+      >
+        <img
+          src="/images/stylsmyth-brand-logo-white.svg"
+          alt="StylSmyth"
+          class="block"
+        />
+        <!-- The cursor-follow label -->
+        <span
+          class="bg-n-950 absolute top-0 left-0 flex w-30 -translate-x-1/2 -translate-y-full items-center overflow-hidden rounded-3xl py-4 opacity-0 shadow-sm transition-opacity duration-150 group-hover:opacity-100"
+          aria-hidden="true"
+        >
+          <!-- Track 1: SLOW -->
+          <span
+            class="pointer-events-none absolute inset-0 flex [animation:marquee_3.5s_linear_infinite] items-center py-2 will-change-transform"
+          >
+            <span
+              class="text-n-50 px-2 text-xs font-medium tracking-wide whitespace-nowrap"
+            >
+              Contact Us&nbsp;&nbsp;&nbsp;&nbsp;
+            </span>
+            <span
+              class="text-n-50 px-2 text-xs font-medium tracking-wide whitespace-nowrap"
+            >
+              Contact Us&nbsp;&nbsp;&nbsp;&nbsp;
+            </span>
+          </span>
+
+          <!-- Track 2: FAST (slightly dimmer + offset for depth) -->
+          <span
+            class="pointer-events-none absolute inset-0 flex [animation:marquee_1.6s_linear_infinite] items-center py-4 opacity-80 will-change-transform"
+          >
+            <span
+              class="text-n-50 px-2 text-xs font-medium tracking-wide whitespace-nowrap"
+            >
+              Contact Us&nbsp;&nbsp;&nbsp;&nbsp;
+            </span>
+          </span>
+        </span>
+      </a>
       <!-- Sub title text -->
       <p
         class="text-n-50 w-8/9 text-center text-xs leading-normal font-medium sm:text-lg md:w-4/5 md:text-xl md:leading-8 lg:text-2xl lg:leading-10"
@@ -85,3 +127,43 @@ import { footerMenuItems } from "../../constants";
     </div>
   </div>
 </footer>
+
+<style is:inline>
+  /* Seamless loop */
+  @keyframes marquee {
+    0% {
+      transform: translateX(100%);
+    }
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+</style>
+
+<script is:inline>
+  // Make every [data-hover-text] element show a cursor-following label
+  document.querySelectorAll("[data-hover-text]").forEach((el) => {
+    const label = el.querySelector("span"); // the label we added above
+    if (!label) return;
+
+    const move = (e) => {
+      const rect = el.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      // Position the label at the cursor, offset handled by translate classes
+      label.style.left = x + "px";
+      label.style.top = y + "px";
+    };
+
+    el.addEventListener("mousemove", move, { passive: true });
+
+    // Hide on touch devices (no hover)
+    el.addEventListener(
+      "touchstart",
+      () => {
+        label.style.opacity = "0";
+      },
+      { passive: true }
+    );
+  });
+</script>
