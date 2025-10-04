@@ -51,7 +51,7 @@ import Button from "./Button.astro";
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ name, contact, email, message }),
-        },
+        }
       );
       if (res.ok) {
         messageDiv.textContent = "Thank you! We'll get back to you soon.";
